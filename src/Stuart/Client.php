@@ -44,7 +44,7 @@ class Client
 
     private function getSchedulingSlots($city, $type, \DateTime $dateTime)
     {
-        $apiResponse = $this->httpClient->performGet('/v2/jobs/schedules/'.$city.'/'.$type.'/'.$dateTime->format('Y-m-d'));
+        $apiResponse = $this->httpClient->performGet('/v2/jobs/schedules/' . $city . '/' . $type . '/' . $dateTime->format('Y-m-d'));
 
         if ($apiResponse->success()) {
             return JsonToSchedulingSlots::convert($apiResponse->getBody());

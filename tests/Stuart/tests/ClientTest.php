@@ -6,7 +6,6 @@ use Stuart\Client;
 use Stuart\Converters\JobToJson;
 use Stuart\Infrastructure\ApiResponse;
 use Stuart\Infrastructure\Authenticator;
-use Stuart\City;
 use Stuart\SchedulingSlots;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
@@ -152,11 +151,17 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             new ApiResponse(200, $this->mock->scheduling_slots_response_json())
         );
 
-        $city = City::LONDON;
+        $city = 'London';
         $date = new \DateTime();
         $this->client->getSchedulingSlotsAtPickup($city, $date);
 
         \Phake::verify($this->httpClient)->performGet('/v2/jobs/schedules/London/pickup/'.$date->format('Y-m-d'));
         self::assertInstanceOf(SchedulingSlots::class, $this->client->getSchedulingSlotsAtPickup($city, $date));
+
+        $city = 'Paris';
+        $this->client->getSchedulingSlotsAtDropoff($city, $date);
+
+        \Phake::verify($this->httpClient)->performGet('/v2/jobs/schedules/Paris/dropoff/'.$date->format('Y-m-d'));
+        self::assertInstanceOf(SchedulingSlots::class, $this->client->getSchedulingSlotsAtDropoff($city, $date));
     }
 }
